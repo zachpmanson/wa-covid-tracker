@@ -1,13 +1,7 @@
 import scraper
 import plot_generator
 import sqlite3
-
-def scrape_days(days):
-    data = scraper.scrape_data(days)
-    return data
-
-def generate_all_plots(data):
-    plot_generator.generate_all_plots(data)
+import sys
 
 def store_data(data):
     connection = sqlite3.connect(
@@ -34,10 +28,11 @@ def retrieve_stored_data():
         sqlite3.PARSE_COLNAMES
     )
     cursor = connection.cursor()
-
-    cursor.execute("SELECT * FROM daily_cases ORDER BY date")
+    sql_command = "SELECT * FROM daily_cases ORDER BY date"
+    print(sql_command)
+    cursor.execute(sql_command)
     rows = cursor.fetchall()
-    print(rows)
+    #print(rows)
     # Reformat data for graphing
     data = {
         "dates":[],
@@ -49,10 +44,25 @@ def retrieve_stored_data():
     
     return data
 
+def run_with_stored_data():
+    data = retrieve_stored_data() # get prexisting data
+    if len(data["dates"]) == 0:
+        articles = scraper.get_articles_since() # get all articles since default limit
+    else:
+        articles = scraper.get_articles_since(data["dates"][-1]) # get all articles newer than newest db record
+        
+    print(articles)
+    for article in articles:
+        scraper.scrape_article(article, data)
+    store_data(data) # add all data to db, will update already existing records
+    print(f"{len(data['dates'])} days stored")
+    data = retrieve_stored_data() # get new set from db. Calling again so data is sorted
+    n_days = 80
+
+    if len(sys.argv) == 2:
+        n_days = int(sys.argv[1])
+
+    plot_generator.generate_all_plots(data, n_days)
 
 if __name__ == "__main__":
-    #data = scrape_days(80)
-    #store_data(data)
-    data = (retrieve_stored_data())
-    print("\n",data)
-    generate_all_plots(data)
+    run_with_stored_data()

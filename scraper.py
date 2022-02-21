@@ -7,30 +7,38 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime as dt
 
-def get_all_articles(num_days_to_get):
+def get_articles_since(earliest_date = dt.datetime.strptime("2021-01-01", "%Y-%m-%d").date()):
+    """
+    Gets all covid updates since specified date.
+    """
     r = requests.get("https://ww2.health.wa.gov.au/News/Media-releases-listing-page")
     soup = BeautifulSoup(r.content, "html.parser")
     accordian = soup.find("div", class_="threeCol-accordian")
     articles = accordian.find_all("li")
     covid_update_urls = []
 
-    num_days_found = 0
-    i = 0
-    while (num_days_found < num_days_to_get):
-        li = articles[i]
-        i += 1
-        article_link = li.a
-        
-        if ("COVID-19 update" in article_link.text):
-            covid_update_urls.append(article_link["href"])
-            num_days_found += 1
-            print(f"Is covid update ({num_days_found}/{num_days_to_get}):")
-        else:
-            print(f"Link not covid update:")
-        print(f"\t{article_link.text}")
 
-    print(f"Found {len(covid_update_urls)} articles")
+    for li in articles:
+        article_link = li.a
+        if ("COVID-19 update" in article_link.text):
+            print(f"Is covid update:")
+            print(f"\t{article_link.text}")
+
+            #print("\t"+article_link.text)
+            date_obj = re.search("[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text)
+            if date_obj is not None:
+                date = dt.datetime.strptime(date_obj.group(), "%d %B %Y").date()
+                print(f"\t{(date <= earliest_date)=}")
+                if date <= earliest_date:
+                    break
+                covid_update_urls.append(article_link["href"])
+        
+        else:
+            print(f"Not covid update:")
+            print(f"\t{article_link.text}")
+    
     return covid_update_urls
+
 
 def get_all_article_text(content_area):
     all_p = content_area.div.findAll("p", recursive=True)
@@ -52,7 +60,6 @@ def get_date(content_area):
     return date
 
 def get_local_cases(all_text):
-        
     formats = (
         "([0-9]+)( are)?( new)? local( COVID-19)?( cases)?",
     )
@@ -77,21 +84,3 @@ def scrape_article(url, data):
     all_text = get_all_article_text(content_area)
     
     data["local"].append(get_local_cases(all_text))
-
-data = {
-    "dates":[],
-    "local":[]
-}
-
-def scrape_data(num_days_to_get):
-    articles = get_all_articles(num_days_to_get)
-    data = {
-        "dates":[],
-        "local":[]
-    }
-    for article in articles:
-        scrape_article(article, data)
-    data["dates"].reverse()
-    data["local"].reverse()
-    print(data)
-    return data
