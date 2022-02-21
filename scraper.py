@@ -29,15 +29,6 @@ def get_all_articles(num_days_to_get):
             print(f"Link not covid update:")
         print(f"\t{article_link.text}")
 
-    '''for li in articles[:80]:
-        article_link = li.a
-        
-        if ("COVID-19 update" in article_link.text):
-            print(f"Link is covid update:")
-            covid_update_urls.append(article_link["href"])
-        else:
-            print(f"Link not covid update:")
-        print(f"\t{article_link.text}")'''
     print(f"Found {len(covid_update_urls)} articles")
     return covid_update_urls
 

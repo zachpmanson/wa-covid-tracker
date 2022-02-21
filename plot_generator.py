@@ -2,19 +2,19 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 def generate_local_cases(data):
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
-    plt.gca().xaxis.set_major_locator(mdates.DayLocator())
-
     plt.xticks(rotation="vertical", fontsize="xx-small")
 
-    plt.title("Overnight Local Cases Over Past 80 Days")
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
+    plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=2))
+
+    
+    plt.title(f"Overnight Local Cases Over Past {len(data['dates'])} Days")
     plt.ylabel("Overnight Local Cases")
     plt.xlabel("Date")
 
     plt.ylim(-2,max(data["local"])*1.1)
 
     plt.plot(data["dates"],data["local"])
-
     #plt.axhline([0], color="red", dashes=(1,2))
 
     plt.rcParams['savefig.dpi'] = 300
