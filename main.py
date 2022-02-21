@@ -28,6 +28,15 @@ def retrieve_stored_data():
         sqlite3.PARSE_COLNAMES
     )
     cursor = connection.cursor()
+
+    sql_command = (
+    """CREATE TABLE IF NOT EXISTS daily_cases (
+        date DATE PRIMARY KEY UNIQUE,
+        local_cases INTEGER
+    )""")
+    print(sql_command)
+    cursor.execute(sql_command)
+
     sql_command = "SELECT * FROM daily_cases ORDER BY date"
     print(sql_command)
     cursor.execute(sql_command)
@@ -45,6 +54,7 @@ def retrieve_stored_data():
     return data
 
 def run_with_stored_data():
+   
     data = retrieve_stored_data() # get prexisting data
     if len(data["dates"]) == 0:
         articles = scraper.get_articles_since() # get all articles since default limit
