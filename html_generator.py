@@ -2,7 +2,7 @@ import jinja2
 import os
 
 def generate_index():
-    os.system("sqlite3 wa_covid_data.db -html -header \"SELECT * FROM daily_cases\" > site/table.html")
+    os.system("sqlite3 wa_covid_data.db -html -header \"SELECT * FROM daily_cases ORDER BY date DESC\" > site/table.html")
 
     with open("site/table.html") as f:
         table = f.read()

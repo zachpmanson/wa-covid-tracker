@@ -28,7 +28,7 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
             date_obj = re.search("[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text)
             if date_obj is not None:
                 date = dt.datetime.strptime(date_obj.group(), "%d %B %Y").date()
-                print(f"\t{(date <= earliest_date)=}")
+                print(f"\t(date <= earliest_date)={(date <= earliest_date)}")
                 if date <= earliest_date:
                     break
                 covid_update_urls.append(article_link["href"])
