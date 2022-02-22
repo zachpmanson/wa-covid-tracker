@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime as dt
 
-def get_articles_since(earliest_date = dt.datetime.strptime("2021-01-01", "%Y-%m-%d").date()):
+def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m-%d").date()):
     """
     Gets all covid updates since specified date.
     """

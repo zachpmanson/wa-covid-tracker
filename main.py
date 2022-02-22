@@ -1,5 +1,6 @@
 import scraper
 import plot_generator
+import html_generator
 import sqlite3
 import sys
 
@@ -76,3 +77,4 @@ def run_with_stored_data():
 
 if __name__ == "__main__":
     run_with_stored_data()
+    html_generator.generate_index()

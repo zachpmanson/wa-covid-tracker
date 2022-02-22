@@ -1,3 +1,5 @@
 __pycache__/
 *.png
 *.db
+site/table.html
+site/index.html
