@@ -16,7 +16,7 @@ header {
     margin: auto;
 }
 
-p {
+.infotext {
     max-width: 40em;
     margin: auto;
     text-align: left;
@@ -25,6 +25,7 @@ p {
 footer {
     font-weight: lighter;
     margin-top: 5em;
+    text-align: center;
 }
 
 table {
