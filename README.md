@@ -14,4 +14,4 @@ To run
 python3 main.py [days_to_chart]
 ```
 
-First run will download scrape all articles since 2021-01-01 and create a sqlite database to store that data in. 
+First run will download scrape all articles since 2021-01-01 and create a sqlite database to store that data in.  It will also (re)generate `site/index.html` based on `site/template.html` and `site/table.html`, and include the data visualisations.
