@@ -16,6 +16,12 @@ header {
     margin: auto;
 }
 
+p {
+    max-width: 40em;
+    margin: auto;
+    text-align: left;
+}
+
 footer {
     font-weight: lighter;
     margin-top: 5em;
