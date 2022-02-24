@@ -24,7 +24,7 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
             print(f"Is covid update:")
             print(f"\t{article_link.text}")
 
-            #print("\t"+article_link.text)
+            # COVID UPDATE must have contain date
             date_obj = re.search("[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text)
             if date_obj is not None:
                 date = dt.datetime.strptime(date_obj.group(), "%d %B %Y").date()
@@ -41,6 +41,9 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
 
 
 def get_all_article_text(content_area):
+    '''
+    Extracts all text <p> from article.  Converts written numbers ot digits.
+    '''
     all_p = content_area.div.findAll("p", recursive=True)
     all_text = ""
     for p in all_p:
@@ -60,12 +63,16 @@ def get_date(content_area):
     return date
 
 def get_local_cases(all_text):
+    '''
+    Gets the number of local cases from a given string.  Expects all numbers to
+    be written as digits.
+    '''
     formats = (
         "([0-9]+)( are)?( new)? local( COVID-19)?( cases)?",
     )
 
     local_cases_text = re.search(formats[0],all_text)
-    local_cases = 0
+    local_cases = 0 # defaults to 0 cases (should change to NaN or None)
     if local_cases_text is not None:
         local_cases_obj = re.search( "\d+", local_cases_text.group() )
         local_cases = int( str( local_cases_obj.group() ) )

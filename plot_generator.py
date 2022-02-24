@@ -19,7 +19,7 @@ def generate_local_cases(data, n_days):
     plt.rcParams['savefig.dpi'] = 300
     plt.tight_layout()
 
-    filename = "site/images/local_cases.png"
+    filename = "./site/images/local_cases.png"
     plt.savefig(filename)
     print(f"Generated {filename} with {n_days} days.")
     
