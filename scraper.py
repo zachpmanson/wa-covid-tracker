@@ -68,13 +68,14 @@ def get_local_cases(all_text):
     be written as digits.
     '''
     formats = (
-        "([0-9]+)( are)?( new)? local( COVID-19)?( cases)?",
+        "(([0-9]|,)+)( are)?( new)? local( COVID-19)?( cases)?",
     )
 
     local_cases_text = re.search(formats[0],all_text)
     local_cases = 0 # defaults to 0 cases (should change to NaN or None)
     if local_cases_text is not None:
-        local_cases_obj = re.search( "\d+", local_cases_text.group() )
+        local_cases_group = local_cases_text.group().replace(",","")
+        local_cases_obj = re.search( "\d+", local_cases_group )
         local_cases = int( str( local_cases_obj.group() ) )
         
     print(local_cases)
