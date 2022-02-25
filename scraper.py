@@ -10,6 +10,7 @@ import datetime as dt
 def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m-%d").date()):
     """
     Gets all covid updates since specified date.
+    By default retrieves all newer than 2020-12-31.  Returns a list of links.
     """
     r = requests.get("https://ww2.health.wa.gov.au/News/Media-releases-listing-page")
     soup = BeautifulSoup(r.content, "html.parser")
@@ -21,35 +22,36 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
     for li in articles:
         article_link = li.a
         if ("COVID-19 update" in article_link.text):
-            print(f"Is covid update:")
-            print(f"\t{article_link.text}")
+            print(f"Is covid update:\n\t{article_link.text}")
 
-            # COVID UPDATE must have contain date
+            # COVID UPDATE must contain date.  Some have other headlines.
             date_obj = re.search("[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text)
             if date_obj is not None:
                 date = dt.datetime.strptime(date_obj.group(), "%d %B %Y").date()
+                # Wish I could use Python 3.8+ f-strings but alas
                 print(f"\t(date <= earliest_date)={(date <= earliest_date)}")
                 if date <= earliest_date:
                     break
                 covid_update_urls.append(article_link["href"])
         
         else:
-            print(f"Not covid update:")
-            print(f"\t{article_link.text}")
-    
+            print(f"Not covid update:\n\t{article_link.text}")
+
     return covid_update_urls
 
 
 def get_all_article_text(content_area):
     '''
-    Extracts all text <p> from article.  Converts written numbers ot digits.
+    Extracts all text <p> from article.
+    Converts written numbers 0-10 to digits.
+    Returns concatenated string of all text within given content area.
     '''
     all_p = content_area.div.findAll("p", recursive=True)
     all_text = ""
     for p in all_p:
         all_text += p.text+"\n"
 
-        # Sometimes low numbers are written in words
+    # Sometimes low numbers are written in words
     words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
     for i in range(len(words)):
         all_text = all_text.replace(words[i], str(i))
@@ -67,16 +69,17 @@ def get_local_cases(all_text):
     Gets the number of local cases from a given string.  Expects all numbers to
     be written as digits.
     '''
+    # Is stored as set in case they really change it up and multiple options are needed
     formats = (
         "(([0-9]|,)+)( are)?( new)? local( COVID-19)?( cases)?",
     )
 
-    local_cases_text = re.search(formats[0],all_text)
+    local_cases_line_obj = re.search(formats[0],all_text)
     local_cases = 0 # defaults to 0 cases (should change to NaN or None)
-    if local_cases_text is not None:
-        local_cases_group = local_cases_text.group().replace(",","")
-        local_cases_obj = re.search( "\d+", local_cases_group )
-        local_cases = int( str( local_cases_obj.group() ) )
+    if local_cases_line_obj is not None:
+        local_cases_line_text = local_cases_line_obj.group().replace(",","")
+        local_cases_count_obj = re.search( "\d+", local_cases_line_text )
+        local_cases = int( str( local_cases_count_obj.group() ) )
         
     print(local_cases)
     return local_cases

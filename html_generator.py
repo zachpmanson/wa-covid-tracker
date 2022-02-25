@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timezone, timedelta
 
 def generate_index():
+    # Easier to use system sqlite3 than get sqlite-html bindings for Python
     os.system('sqlite3 wa_covid_data.db -html -header "SELECT * FROM daily_cases ORDER BY date DESC" > site/table.html')
 
     with open("./site/table.html") as f:
