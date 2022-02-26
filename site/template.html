@@ -28,8 +28,20 @@
 		Last check: {{update_time}}
 	</p>	
 	<img src="./images/local_cases.png">
-	<table>{{table}}</table>
-
+	<table>
+		<tr>
+			{% for heading in table_headings %}
+			<th>{{heading}}</th>
+			{% endfor %}
+		</tr>
+		{% for record in table_records %}
+		<tr>
+			{% for attribute in record%}
+			<td>{{attribute}}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
     <footer>
         <p>
             Made with ❤️ by <a href="https://zachmanson.com">Zach Manson</a><br>

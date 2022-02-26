@@ -7,9 +7,7 @@ To install python dependencies:
 pip install -r requirements.txt
 ```
 
-Also requires `sqlite3` to be installed and in environment vars.
-
-To run:
+To scrape data and generate page:
 ```bash
 python3 main.py [days_to_chart]
 ```

@@ -31,8 +31,14 @@ footer {
 table {
     margin-left: auto;
     margin-right: auto;
+    border-collapse: collapse;
 }
 
 th,td {
     text-align: center;
+    width: 10em;
+}
+
+tr:nth-child(even) {
+    background-color: lightgrey;
 }

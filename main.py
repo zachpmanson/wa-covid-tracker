@@ -25,7 +25,7 @@ def store_data(data):
         cursor.execute(sql_command)
     connection.commit()
 
-def retrieve_stored_data():
+def retrieve_stored_records():
     '''
     Extracts data from sqlite database called wa_covid_data.db.
     Returns dictionary with lists for each attribute of the table.
@@ -49,23 +49,27 @@ def retrieve_stored_data():
     sql_command = "SELECT * FROM daily_cases ORDER BY date"
     print(sql_command)
     cursor.execute(sql_command)
-    rows = cursor.fetchall()
+    records = cursor.fetchall()
+    return records;
 
+def convert_records_to_columns(records):
     # Reformat data for graphing
     data = {
         "dates":[],
         "local":[]
     }
-    for row in rows:
-        data["dates"].append(row[0])
-        data["local"].append(row[1])
+    for record in records:
+        data["dates"].append(record[0])
+        data["local"].append(record[1])
     
     return data
 
 def run_with_stored_data():
-   
-    data = retrieve_stored_data() # get prexisting data
-    if len(data["dates"]) == 0:
+    
+    records = retrieve_stored_records()
+    data = convert_records_to_columns(records) # get prexisting data
+
+    if len(records) == 0:
         # Database was empty, get all articles since default limit
         articles = scraper.get_articles_since() 
     else:
@@ -78,16 +82,18 @@ def run_with_stored_data():
         scraper.scrape_article(article, data)
 
     store_data(data) # add all data to db, will update already existing records
-    print(f"{len(data['dates'])} days stored")
-    # Get new set from db. Calling again so data is sorted.  This is likely inefficient
-    data = retrieve_stored_data()
+    print(f"{len(records)} days stored")
     
+    # Get new set from db. Calling again so data is sorted.  This is likely inefficient
+    records = retrieve_stored_records()
+    data = convert_records_to_columns(records)
+
     n_days = 80
     if len(sys.argv) == 2:
         n_days = int(sys.argv[1])
 
     plot_generator.generate_all_plots(data, n_days)
+    html_generator.generate_index(records)
 
 if __name__ == "__main__":
     run_with_stored_data()
-    html_generator.generate_index()
