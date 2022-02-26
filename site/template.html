@@ -2,6 +2,7 @@
 <html>
 <head>
 	
+	<link rel="stylesheet" href="./styles/colors.css">
 	<link rel="stylesheet" href="./styles/global.css">
 	
 	<link rel="apple-touch-icon" sizes="180x180" href="https://zachmanson.com/icons/apple-touch-icon.png">
@@ -21,13 +22,13 @@
 </head>
 
 <body>
-	<header><h1>Local COVID-19 Cases in Western Australia</h1></header>
+	<header><h1 onclick="toggleDarkMode()">Local COVID-19 Cases in Western Australia</h1></header>
 	<p class="infotext">
 		Data source: <a href="https://ww2.health.wa.gov.au/News/Media-releases-listing-page">WA Department of Health Media Releases</a><br>
 		Source code: <a href="https://github.com/pavo-etc/wa-covid-tracker">GitHub</a><br>
 		Last check: {{update_time}}
 	</p>	
-	<img src="./images/local_cases.png">
+	<img src={{image_src}}>
 	<table>
 		<tr>
 			{% for heading in table_headings %}
@@ -48,3 +49,9 @@
         </p>
     </footer>
 </body>
+<script>
+function toggleDarkMode() {
+	let element = document.body;
+	element.classList.toggle("dark-mode")
+}
+</script>

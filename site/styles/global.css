@@ -1,4 +1,6 @@
 body {
+    background-color: white;
+    color: black;
     margin: 0 1em;
     font-family: sans-serif;
     text-align: center;
@@ -41,4 +43,30 @@ th,td {
 
 tr:nth-child(even) {
     background-color: lightgrey;
+}
+
+.dark-mode {
+    background-color: var(--background);
+    color: var(--white);
+}
+
+.dark-mode a {
+    color: var(--purple);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: all 0.1s ease-in;
+}
+
+.dark-mode a:hover {
+    text-decoration-color: var(--purple);
+}
+
+.dark-mode a:active {
+    color: var(--white);
+    text-decoration-color: var(--white);
+    transition: all 0.0s ease-in;
+}
+
+.dark-mode tr:nth-child(even) {
+    background-color: var(--grey);
 }
