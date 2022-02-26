@@ -36,3 +36,11 @@ table {
 th,td {
     text-align: center;
 }
+
+.scroll {
+    height: 40em;
+    max-width: 20em;
+    overflow-y: scroll;
+    margin-left: auto;
+    margin-right: auto;
+}
