@@ -28,7 +28,7 @@
 		Source code: <a href="https://github.com/pavo-etc/wa-covid-tracker">GitHub</a><br>
 		Last check: {{update_time}}
 	</p>	
-	<img src={{image_src}}>
+	<img id="graph" src="./images/local_cases.png">
 	<table>
 		<tr>
 			{% for heading in table_headings %}
@@ -52,6 +52,12 @@
 <script>
 function toggleDarkMode() {
 	let element = document.body;
-	element.classList.toggle("dark-mode")
+	element.classList.toggle("dark-mode");
+	let graph = document.getElementById("graph");
+	if (graph.src.match("./images/local_cases.png")) {
+		graph.src = "./images/local_cases_dark.png";
+	} else {
+		graph.src = "./images/local_cases.png";
+	}
 }
 </script>

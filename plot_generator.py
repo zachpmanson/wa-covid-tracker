@@ -1,16 +1,17 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib
 
 
 def generate_local_cases(data, n_days, dark=False):
-    plt.style.use("default")
+    matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 
     if dark:
-        #plt.style.use("./site/styles/dracula.mplstyle")
-        plt.style.use("dark_background")
+        plt.style.use("./site/styles/dracula.mplstyle")
 
+    plt.figure()
 
-
+    plt.plot(data["dates"][-n_days:],data["local"][-n_days:])
     plt.xticks(rotation="vertical", fontsize="xx-small")
 
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
@@ -23,10 +24,10 @@ def generate_local_cases(data, n_days, dark=False):
 
     plt.ylim(-2,max(data["local"])*1.1)
 
-    plt.plot(data["dates"][-n_days:],data["local"][-n_days:])
 
     #lt.rcParams['savefig.dpi'] = 300
     plt.tight_layout()
+
 
     folder = "./site/images"
     if dark: 
@@ -38,7 +39,8 @@ def generate_local_cases(data, n_days, dark=False):
 
     print(f"Generated {filename} with {n_days} days.")
 
+
 def generate_all_plots(data, n_days):
     generate_local_cases(data, n_days)    
+    generate_local_cases(data, n_days, dark=True)    
     # apparently plt.styles.use() REQUIRES a literal. Don't know why
-    generate_local_cases(data, n_days, dark=True)
