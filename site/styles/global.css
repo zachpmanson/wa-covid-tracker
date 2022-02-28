@@ -45,8 +45,8 @@ tr:nth-child(even) {
     background-color: lightgrey;
 }
 
-a:visited {
-    color:blue;
+a, a:visited {
+    color: #0000FF;
 }
 
 .dark-mode {
