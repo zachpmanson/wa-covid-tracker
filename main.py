@@ -15,10 +15,11 @@ def store_data(data):
     )
     cursor = connection.cursor()
     for i in range(len(data["dates"])):
+        local_cases = "Not reported" if data['local'][i] is None else data['local'][i]
         sql_command = (
         f"""INSERT INTO daily_cases(date, local_cases)
-        VALUES ('{data['dates'][i].strftime('%Y-%m-%d')}', {data['local'][i]})
-        ON CONFLICT (date) DO UPDATE SET local_cases={data['local'][i]};
+        VALUES ('{data['dates'][i].strftime('%Y-%m-%d')}', '{local_cases}')
+        ON CONFLICT (date) DO UPDATE SET local_cases='{local_cases}';
         """
         )
         print(sql_command) 
@@ -60,8 +61,10 @@ def convert_records_to_columns(records):
     }
     for record in records:
         data["dates"].append(record[0])
-        data["local"].append(record[1])
-    
+        try:
+            data["local"].append(int(record[1]))
+        except:
+            data["local"].append(None)
     return data
 
 def run_with_stored_data():

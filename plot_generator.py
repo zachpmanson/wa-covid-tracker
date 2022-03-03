@@ -1,17 +1,18 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib
-
+import numpy as np
 
 def generate_local_cases(data, n_days, dark=False):
     matplotlib.rcParams.update(matplotlib.rcParamsDefault)
-
+    local_cases_array = np.array(data["local"][-n_days:], dtype=np.float)
+    print(local_cases_array)
     if dark:
         plt.style.use("./site/styles/dracula.mplstyle")
 
     plt.figure()
 
-    plt.plot(data["dates"][-n_days:],data["local"][-n_days:])
+    plt.plot(data["dates"][-n_days:], local_cases_array, marker=".")
     plt.xticks(rotation="vertical", fontsize="xx-small")
 
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
@@ -22,7 +23,8 @@ def generate_local_cases(data, n_days, dark=False):
     plt.ylabel("Overnight Local Cases")
     plt.xlabel("Date")
 
-    plt.ylim(-2,max(data["local"])*1.1)
+    ylim = np.nanmax(local_cases_array) * 1.1
+    plt.ylim(-2, ylim)
 
 
     #lt.rcParams['savefig.dpi'] = 300

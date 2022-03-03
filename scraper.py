@@ -6,6 +6,7 @@ import re
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime as dt
+import numpy as np
 
 def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m-%d").date()):
     """
@@ -75,7 +76,7 @@ def get_local_cases(all_text):
     )
 
     local_cases_line_obj = re.search(formats[0],all_text)
-    local_cases = 0 # defaults to 0 cases (should change to NaN or None)
+    local_cases = None # defaults to 0 cases (should change to NaN or None)
     if local_cases_line_obj is not None:
         local_cases_line_text = local_cases_line_obj.group().replace(",","")
         local_cases_count_obj = re.search( "\d+", local_cases_line_text )
