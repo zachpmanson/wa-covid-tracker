@@ -109,11 +109,12 @@ def get_all_cases(all_text):
     return all_cases
 
 
-def scrape_article(url, data):
-    r = requests.get("https://ww2.health.wa.gov.au/" + url)
+def scrape_article(relative_url, data):
+    url = "https://ww2.health.wa.gov.au/" + relative_url
+    r = requests.get(url)
     soup = BeautifulSoup(r.content, "html.parser")
     content_area = soup.find(id="contentArea")
-        
+    data["url"].append(url)
     data["dates"].append(get_date(content_area))
 
     all_text = get_all_article_text(content_area)

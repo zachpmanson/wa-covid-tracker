@@ -37,9 +37,9 @@
 		</tr>
 		{% for record in table_records %}
 		<tr>
-			{% for attribute in record%}
-			<td>{{attribute}}</td>
-			{% endfor %}
+			<td><a href={{record[1]}}>{{record[0]}}</a></td>
+			<td>{{record[2]}}</td>
+			<td>{{record[3]}}</td>
 		</tr>
 		{% endfor %}
 	</table>

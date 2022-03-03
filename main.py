@@ -18,9 +18,17 @@ def store_data(data):
         local_cases = "Not reported" if data['local'][i] is None else data['local'][i]
         all_cases = "Not reported" if data['all'][i] is None else data['all'][i]
         sql_command = (
-        f"""INSERT INTO daily_cases(date, local_cases, all_cases)
-        VALUES ('{data['dates'][i].strftime('%Y-%m-%d')}', '{local_cases}','{all_cases}')
-        ON CONFLICT (date) DO UPDATE SET local_cases='{local_cases}', all_cases='{all_cases}';
+        f"""INSERT INTO daily_cases(date, url, local_cases, all_cases)
+        VALUES (
+            '{data['dates'][i].strftime('%Y-%m-%d')}',
+            '{data["url"][i]}',
+            '{local_cases}',
+            '{all_cases}'
+        )
+        ON CONFLICT (date) DO UPDATE SET 
+            url='{data["url"][i]}',
+            local_cases='{local_cases}', 
+            all_cases='{all_cases}';
         """
         )
         print(sql_command) 
@@ -44,6 +52,7 @@ def retrieve_stored_records():
     sql_command = (
     """CREATE TABLE IF NOT EXISTS daily_cases (
         date DATE PRIMARY KEY UNIQUE,
+        url TEXT,
         local_cases TEXT,
         all_cases TEXT
     )""")
@@ -61,18 +70,20 @@ def convert_records_to_columns(records):
     # Reformat data for graphing
     data = {
         "dates" : [],
+        "url" : [],
         "local" : [],
         "all" : []
     }
     for record in records:
         #print(f"{record=}")
         data["dates"].append(record[0])
+        data["url"].append(record[1])
         try:
-            data["local"].append(int(record[1]))
+            data["local"].append(int(record[2]))
         except:
             data["local"].append(None)
         try:
-            data["all"].append(int(record[2]))
+            data["all"].append(int(record[3]))
         except:
             data["all"].append(None)
     return data
