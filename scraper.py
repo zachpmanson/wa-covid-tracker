@@ -82,8 +82,28 @@ def get_local_cases(all_text):
         local_cases_count_obj = re.search( "\d+", local_cases_line_text )
         local_cases = int( str( local_cases_count_obj.group() ) )
         
-    print(local_cases)
+    print(f"{local_cases=}")
     return local_cases
+
+def get_all_cases(all_text):
+    '''
+    Gets the number of cases from a given string.  Expects all numbers to
+    be written as digits.
+    '''
+    # Is stored as set in case they really change it up and multiple options are needed
+    formats = (
+        "(total )?(of )?(([0-9]|,)+)( are)?( new)?( COVID-19)?( cases)?",
+    )
+
+    all_cases_line_obj = re.search(formats[0],all_text)
+    all_cases = None # defaults to 0 cases (should change to NaN or None)
+    if all_cases_line_obj is not None:
+        all_cases_line_text = all_cases_line_obj.group().replace(",","")
+        all_cases_count_obj = re.search( "\d+", all_cases_line_text )
+        all_cases = int( str( all_cases_count_obj.group() ) )
+        
+    print(f"{all_cases=}")
+    return all_cases
 
 
 def scrape_article(url, data):
@@ -96,3 +116,6 @@ def scrape_article(url, data):
     all_text = get_all_article_text(content_area)
     
     data["local"].append(get_local_cases(all_text))
+    data["all"].append(get_all_cases(all_text))
+    #print(f"{data['local']}")
+    #print(f"{data['all']}")

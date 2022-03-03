@@ -16,10 +16,11 @@ def store_data(data):
     cursor = connection.cursor()
     for i in range(len(data["dates"])):
         local_cases = "Not reported" if data['local'][i] is None else data['local'][i]
+        all_cases = "Not reported" if data['all'][i] is None else data['all'][i]
         sql_command = (
-        f"""INSERT INTO daily_cases(date, local_cases)
-        VALUES ('{data['dates'][i].strftime('%Y-%m-%d')}', '{local_cases}')
-        ON CONFLICT (date) DO UPDATE SET local_cases='{local_cases}';
+        f"""INSERT INTO daily_cases(date, local_cases, all_cases)
+        VALUES ('{data['dates'][i].strftime('%Y-%m-%d')}', '{local_cases}','{all_cases}')
+        ON CONFLICT (date) DO UPDATE SET local_cases='{local_cases}', all_cases='{all_cases}';
         """
         )
         print(sql_command) 
@@ -39,10 +40,12 @@ def retrieve_stored_records():
     )
     cursor = connection.cursor()
 
+    # store as text because NaN
     sql_command = (
     """CREATE TABLE IF NOT EXISTS daily_cases (
         date DATE PRIMARY KEY UNIQUE,
-        local_cases INTEGER
+        local_cases TEXT,
+        all_cases TEXT
     )""")
     print(sql_command)
     cursor.execute(sql_command)
@@ -51,20 +54,27 @@ def retrieve_stored_records():
     print(sql_command)
     cursor.execute(sql_command)
     records = cursor.fetchall()
-    return records;
+    #print(f"{records=}")
+    return records
 
 def convert_records_to_columns(records):
     # Reformat data for graphing
     data = {
-        "dates":[],
-        "local":[]
+        "dates" : [],
+        "local" : [],
+        "all" : []
     }
     for record in records:
+        #print(f"{record=}")
         data["dates"].append(record[0])
         try:
             data["local"].append(int(record[1]))
         except:
             data["local"].append(None)
+        try:
+            data["all"].append(int(record[2]))
+        except:
+            data["all"].append(None)
     return data
 
 def run_with_stored_data():
@@ -90,7 +100,7 @@ def run_with_stored_data():
     # Get new set from db. Calling again so data is sorted.  This is likely inefficient
     records = retrieve_stored_records()
     data = convert_records_to_columns(records)
-
+    #print(f"\n\ndata as of main.py: {data=}")
     n_days = 80
     if len(sys.argv) == 2:
         n_days = int(sys.argv[1])

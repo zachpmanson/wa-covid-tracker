@@ -3,46 +3,43 @@ import matplotlib.dates as mdates
 import matplotlib
 import numpy as np
 
-def generate_local_cases(data, n_days, dark=False):
+def generate_cases(data, n_days, dark=False):
     matplotlib.rcParams.update(matplotlib.rcParamsDefault)
     local_cases_array = np.array(data["local"][-n_days:], dtype=np.float)
-    print(local_cases_array)
+    all_cases_array = np.array(data["all"][-n_days:], dtype=np.float)
+
     if dark:
         plt.style.use("./site/styles/dracula.mplstyle")
 
     plt.figure()
 
-    plt.plot(data["dates"][-n_days:], local_cases_array, marker=".")
+    plt.plot(data["dates"][-n_days:], all_cases_array, marker=".", label="Total Cases Overnight", alpha=1)
+    plt.plot(data["dates"][-n_days:], local_cases_array, linestyle=":", marker="4", label="Local Cases Overnight", alpha=1)
+    
     plt.xticks(rotation="vertical", fontsize="xx-small")
 
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
     plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=2))
 
     
-    plt.title(f"Overnight Local Cases Over Past {n_days} Days")
-    plt.ylabel("Overnight Local Cases")
+    plt.title(f"New Daily Cases Over Past {n_days} Days")
+    plt.ylabel("Cases")
     plt.xlabel("Date")
 
-    ylim = np.nanmax(local_cases_array) * 1.1
-    plt.ylim(-2, ylim)
-
-
-    #lt.rcParams['savefig.dpi'] = 300
+    plt.legend()
     plt.tight_layout()
-
 
     folder = "./site/images"
     if dark: 
-        filename = f"{folder}/local_cases_dark.png"
+        filename = f"{folder}/cases_dark.png"
     else: 
-        filename = f"{folder}/local_cases.png"
+        filename = f"{folder}/cases.png"
     
-    plt.savefig(filename, dpi=300, transparent=True)#, facecolor="#282A36")
+    plt.savefig(filename, dpi=300, transparent=True)
 
     print(f"Generated {filename} with {n_days} days.")
 
 
 def generate_all_plots(data, n_days):
-    generate_local_cases(data, n_days)    
-    generate_local_cases(data, n_days, dark=True)    
-    # apparently plt.styles.use() REQUIRES a literal. Don't know why
+    generate_cases(data, n_days)    
+    generate_cases(data, n_days, dark=True)    

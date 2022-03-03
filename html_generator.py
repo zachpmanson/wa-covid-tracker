@@ -4,7 +4,7 @@ from datetime import datetime, timezone, timedelta
 
 def generate_index(records):
 
-    table_headings = ("Date", "Local Cases Overnight")
+    table_headings = ("Date", "Local Cases Overnight", "Total Cases Overnight")
 
     # Get and convert time to AWST (UTC+8)
     now_utc = datetime.now()
