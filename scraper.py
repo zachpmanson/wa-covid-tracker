@@ -22,7 +22,9 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
 
     for li in articles:
         article_link = li.a
-        if ("COVID-19 update" in article_link.text):
+        print(f"{article_link.text=}")
+        #if ("COVID-19 update" in article_link.text):
+        if re.fullmatch("COVID-19 (U|u)pdate *[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text):
             print(f"Is covid update:\n\t{article_link.text}")
 
             # COVID UPDATE must contain date.  Some have other headlines.
@@ -92,13 +94,14 @@ def get_all_cases(all_text):
     '''
     # Is stored as set in case they really change it up and multiple options are needed
     formats = (
-        "(total )?(of )?(([0-9]|,)+)( are)?( new)?( COVID-19)?( cases)?",
+        "(total )?(of )?(([0-9]|,)+) new(?! local)( COVID-19)?( case(s?))?",
     )
 
     all_cases_line_obj = re.search(formats[0],all_text)
     all_cases = None # defaults to 0 cases (should change to NaN or None)
     if all_cases_line_obj is not None:
         all_cases_line_text = all_cases_line_obj.group().replace(",","")
+        print(f"{all_cases_line_text=}\n{all_cases_line_obj.group()=}")
         all_cases_count_obj = re.search( "\d+", all_cases_line_text )
         all_cases = int( str( all_cases_count_obj.group() ) )
         
