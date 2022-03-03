@@ -24,7 +24,7 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
         article_link = li.a
         print(f"{article_link.text=}")
         #if ("COVID-19 update" in article_link.text):
-        if re.fullmatch("COVID-19 (U|u)pdate *[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text):
+        if re.fullmatch("COVID-19 (U|u)pdate *[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text.strip()):
             print(f"Is covid update:\n\t{article_link.text}")
 
             # COVID UPDATE must contain date.  Some have other headlines.
