@@ -24,11 +24,12 @@ def get_articles_since(earliest_date = dt.datetime.strptime("2020-12-31", "%Y-%m
         article_link = li.a
         print(f"{article_link.text=}")
         #if ("COVID-19 update" in article_link.text):
-        if re.fullmatch("COVID-19 (U|u)pdate *[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text.strip()):
+        # accounts for: hyphens, em dashes
+        if re.fullmatch("COVID.?19( )+(U|u)pdate(.?){6}[0-9]+( )+[a-zA-Z]+( )+[0-9]{4}", article_link.text.strip()):
             print(f"Is covid update:\n\t{article_link.text}")
 
             # COVID UPDATE must contain date.  Some have other headlines.
-            date_obj = re.search("[0-9]+ [a-zA-Z]+ [0-9]{4}", article_link.text)
+            date_obj = re.search("[0-9]+( )+[a-zA-Z]+( )+[0-9]{4}", article_link.text)
             if date_obj is not None:
                 date = dt.datetime.strptime(date_obj.group(), "%d %B %Y").date()
                 # Wish I could use Python 3.8+ f-strings but alas
