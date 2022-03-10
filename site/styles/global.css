@@ -7,10 +7,6 @@ body {
     line-height: 1.4;
 }
 
-::selection {
-    background-color: var(--grey);
-}
-
 img {
     max-width: 100%;
     max-height: 40em;
@@ -76,5 +72,9 @@ a, a:visited {
 }
 
 .dark-mode tr:nth-child(even) {
+    background-color: var(--grey);
+}
+
+.dark-mode ::selection {
     background-color: var(--grey);
 }
