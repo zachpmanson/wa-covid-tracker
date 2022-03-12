@@ -1,7 +1,7 @@
 .codeblock {
     border: 2px solid var(--purple);
     border-radius: 5px;
-    padding: 1em;
+    padding: 1rem;
     overflow-x: auto;
 }
 

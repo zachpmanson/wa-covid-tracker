@@ -1,7 +1,7 @@
 body {
     background-color: white;
     color: black;
-    margin: 0 1em;
+    margin: 0 1rem;
     font-family: sans-serif;
     text-align: center;
     line-height: 1.4;
@@ -9,24 +9,24 @@ body {
 
 img {
     max-width: 100%;
-    max-height: 40em;
+    max-height: 40rem;
     object-fit: contain;
 }
 
 header {
-    max-width: 50em;
+    max-width: 50rem;
     margin: auto;
 }
 
 .infotext {
-    max-width: 40em;
+    max-width: 40rem;
     margin: auto;
     text-align: left;
 }
 
 footer {
     font-weight: lighter;
-    margin-top: 5em;
+    margin-top: 5rem;
     text-align: center;
 }
 
@@ -38,7 +38,7 @@ table {
 
 th,td {
     text-align: center;
-    width: 10em;
+    width: 10rem;
 }
 
 tr:nth-child(even) {
