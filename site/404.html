@@ -29,4 +29,16 @@
 	<p>404 Error.  This page certainly doesn't exist. And I'm disappointed in you for thinking it did.</p>
 
 </body>
+<script>
+	function toggleDarkMode() {
+		console.log("toggling dark mode");
+		let element = document.body;
+		element.classList.toggle("dark-mode");
+	}
+
+	if (localStorage.getItem('dark-mode') === '1') {
+		toggleDarkMode();
+		console.log("was using dark mode");
+    }
+</script>
 </html>
