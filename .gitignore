@@ -4,3 +4,6 @@ __pycache__/
 site/table.html
 site/index.html
 out.txt
+
+venv/
+*.sh
