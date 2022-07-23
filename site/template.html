@@ -29,20 +29,23 @@
 		Last check: {{update_time}}
 	</p>	
 	<img id="graph" src="./images/cases.png">
-	<table>
-		<tr>
-			{% for heading in table_headings %}
-			<th>{{heading}}</th>
+	<details open>
+		<summary>Data & Sources</summary>
+		<table>
+			<tr>
+				{% for heading in table_headings %}
+				<th>{{heading}}</th>
+				{% endfor %}
+			</tr>
+			{% for record in table_records %}
+			<tr>
+				<td><a href={{record[1]}}>{{record[0]}}</a></td>
+				<td>{{record[2]}}</td>
+				<td>{{record[3]}}</td>
+			</tr>
 			{% endfor %}
-		</tr>
-		{% for record in table_records %}
-		<tr>
-			<td><a href={{record[1]}}>{{record[0]}}</a></td>
-			<td>{{record[2]}}</td>
-			<td>{{record[3]}}</td>
-		</tr>
-		{% endfor %}
-	</table>
+		</table>
+	</details>
     <footer>
         <p>
             Made inefficiently by <a href="https://zachmanson.com">Zach Manson</a>
