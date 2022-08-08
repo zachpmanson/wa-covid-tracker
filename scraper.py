@@ -89,7 +89,7 @@ def get_local_cases(all_text):
     local_cases_line_obj = re.search(formats[0],all_text)
     local_cases = None # defaults to 0 cases (should change to NaN or None)
     if local_cases_line_obj is not None:
-        local_cases_line_text = local_cases_line_obj.group().replace(",","")
+        local_cases_line_text = local_cases_line_obj.group().replace(",","").replace("  ", " ")
         local_cases_count_obj = re.search( "\d+", local_cases_line_text )
         local_cases = int( str( local_cases_count_obj.group() ) )
         
@@ -109,7 +109,7 @@ def get_all_cases(all_text):
     all_cases_line_obj = re.search(formats[0],all_text)
     all_cases = None # defaults to 0 cases (should change to NaN or None)
     if all_cases_line_obj is not None:
-        all_cases_line_text = all_cases_line_obj.group().replace(",","")
+        all_cases_line_text = all_cases_line_obj.group().replace(",","").replace("  ", " ")
         print(f"{all_cases_line_text=}\n{all_cases_line_obj.group()=}")
         all_cases_count_obj = re.search( "\d+", all_cases_line_text )
         all_cases = int( str( all_cases_count_obj.group() ) )
